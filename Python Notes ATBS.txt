@@ -1,0 +1,478 @@
+#codewars for practice, https://www.pythonlikeyoumeanit.com/, git
+
+#If/While, For I in range(up to but not including), elif, else if
+#len, str, range, input, true, false, == <= >= !=, prirnt, range(len()) etc
+
+#pip install modules, have to import modules to make avaliable to python
+#to utilize, write module name followed by . and then funciton of that module
+
+#pyperclip (pyperclip.copy/paste for copying and pasting to clipboard)
+
+#Functions, used by defining a variable, pass arguments through function
+#def hello(name)
+	print ("Hi"+ name)
+ hello("Alice")
+ 
+#Functions have local scope variables which collapse on completion, global variables do not
+#Possble to create global in function with global before variable eg global spam
+
+#Try and except, except zerodivison error for example to stop program from crashing
+#instead can print("error you tried to divide by 0")
+ 
+#Lists: spam = ["cat", "bat", rat"]
+#to get items from a list spam[0]= "cat" (starts from 0)
+#Lists of lists spam[0][1], going backwards [-1]
+#Slice [0:3] goes up to but not including 3 - cat bat
+#Assign new value to a list Spam[0] = fish
+#fish IN/NOT IN spam to search for an item in a list, list(range(2)) =[0,1]
+#returning place in list with index will only return first: spam.index("cat") -> 0 
+#adding to end of list with append: spam.append("gravy")
+#inserting item into list at certain point: spam.insert(1, "chicken")
+#spam.sort for alphabetical/numerical spam.sort(reverse=true) for inverse
+#strings and lists similar, however string immutable
+#mutible data changable has given a refernce to the original list
+
+#dictionaries have key value pairs: myCat = {"size": "fat", "colour": "gray"}
+#myCat{"colour"} ("Key": "Pair")
+#dictionaries are unordered unlike lists [1,2,3]=[3,2,1] returns false
+#whereby dictionaries if unordered but same = true
+#dictionaries are mutiable, hence variables hold references to them, not the dictionary itself
+#list(variable.keys()) returns keys
+#list(variable.values()) returns value pairs
+#list(variable.items()) returns pairs in tuple lists
+#myCat.get(size, 0) returns if avaliable, 0 otherwise (to avoid crashing program)
+#if breed not in myCats: myCats["breed"] = "tabby"
+#alternatively, myCat.setdefault("breed", "tabby") - wont create if already exists
+#PROGRAM BELOW COUNTS CHARACTERS IN A GIVEN MESSAGE
+#message = "sjipdfjpsdf"
+#count = {}
+#for character in message.upper():
+# 		count.setdefault(character, 0)
+#		count(character) = count(character) + 1
+#pprint.pprint(count) #will make the data better than a huge block, external module
+
+#Data structures: list of dictionaries 
+
+#String Syntax: """ """ to format big texts, \ to escape a character, \t tab, \n new line,
+#r' will display a string exactly as it is, raw string
+#indexes, slices and the in and not in operators work with strings. 
+
+#string methods upper() and lower(), isupper() and islower() *boolean value for strings*
+#isalpha(), isalnum(), isdecimal(), isspace(), istitle()  *also boolean*
+#letter only, let/num only, number only, whitespace only, titlecase only
+#.startswith(), .endswith()
+#",".join[x,x,x] *joining strings in a dictionary*
+#split() does the opposide, can do based on a character with split(m) etc
+#rjust() and ljust() to fill string with characters, center() centeres text
+#strip() will remove whitespace from either side, lstrip() or rstrip()
+#replace(string to replace, string to replace with)
+#pyperclip.copy/paste for copying string to clipboard
+
+#string formatting: possible to put %s, conversion specifiers, instead of variables when +ing strings and variables
+#"Hello %s you are invited to a party at %s at %s" %(name, place time)
+
+#running python scripts from outside of IDE
+#shebang line tells pc to run program using python 3: #! python3
+# @py C:\Users\User\Desktop\PythonScripts\helloworld.py %*
+# @pause
+#Save in file location
+# @pyw for no cmd 
+#can shorten out the path by adding script to path environment variable
+#system enviroment variable, find path, edit, add new enviroment variable with path location
+#command line arguments, import sys -> print(sys.argv) : allows to pass through additional information to programs through strings in winR
+----------modules------------
+REGEX
+
+#import re
+#regex specificy a pattern of text to search for eg phone number
+#phoneNumRegex = re.compile(r'\d\d\d-\d\d\d-\d\d\d\d) \d - digit oriented character
+#re.compile looks at strings for a pattern, returns a match object to store in a variable, mo = phoneNumRegex.search(string)
+#.findall finds every occurence of pattern specified
+#.group() will search for first appearence, (1) for first (2) for second etc
+#.search finds the span and the matching item
+
+#seperating string with regex
+#mo.group() to return match object
+#brackets to mark out groups in string r'(\d\d\d)-(\d\d\d)-\d\d\d\d
+#mo.group(1) grabs first bracket, mo.group(2) to grab the second brackets
+#if you're literally looking for a character in string, need to escape the character you're looking for
+#pipe character | will look for suffixes within a word eg r'Bat|man|mobile|wheel
+#will search suffixes that match
+
+# bat|(wo)?man - ? indicates that the string can appear 0 or 1 times
+#(\d\d\d)? - if want a ? in the string you will have to escape the characcter \?
+#bat|(wo)*man - * star character will match 0 or more
+#bat|(wo)+man - + plus character required to appear one of more times
+#haRegex = re.compile(r'Ha{3} - {} will search for a string occuring a specific amount of times
+#at least, at most {3,5}
+#greedy matches will search the max, if not looking for greedy specify {}? question mark after curly brackets
+
+#findall() will return a tuple if there are groups within the regex
+#character classes 
+#\d (looks 0-9)
+#/D any character that is not* a numeric digit 0-9
+#/w any letter, digit, or the underscore character
+#/W any character that is not a letter, digit, or underscore
+#/s any space, tab or newline character
+#/S any character that is NOT a space, tab or newline
+#above capital indicates that it is not searching for that character specified
+#possible to create your own character classes
+#vowelRegex = re.compile(r'[aeiou}') [a-zA-Z] looks lower and uppercase a-z
+#carat symbol will find the inverse aka negative charclass [^aeiou] - any character that is not AEIOU
+
+#carat  ^ also indicates it has to match at the beginning
+#dollar $ also indiates that it has to match at the end of the string
+#beginwithHelloRegex = re.compile(r"^hello")
+#dot . character indicates that anything that contains the specified string
+#eg re.compile(r".at") will search for words that end with at
+#(.*) in a group will search for any character re.compile(r'First name (.*) Last name (.*)') returns first and last name
+#.*? will search nongreedily
+#pass argument to compile function to get it to obtain EVERYTHING including new lines
+#dotStar = re.compile(r'.*', re.DOTALL)
+#case insenstivie argument , re.IGNORECASE or re.I, matches lower case or upper case
+
+#namesRegex = re.compile(r'Agent (\w)\w*) - searches for a grouped letter and then any letters after
+#namesRegex.sub('SUBSTITUTES TEXT AFTER, 'STRING') - replaces matches in string after with specific word
+#namesRegex.sub(r'Agent /1****, STRING TO SUBSTITUTE) - where /1 returns the first group, /2 after would return future matching strings
+#argument to place in verbose mode re.compile(r'', re.VERBOSE), allows you to add comemnts making making observation easier
+re.compile(r'''
+(
+(\d\d\d-)		#area code 
+(\(\d\d\d\))	#or area code with parens and no dash
+\d\d\d\ 		#first 3 digits
+-				#first second dash
+\d\d\d\d\)
+)'''			#last 4 digits
+#to pass multiple arguments use bitwise operator| eg re.VERBOSE |re.DOTALL | re.IGNORECASE
+
+#video 7 ATBS for regex example
+#storing data from pyperclip clipboard: text = pyperclip.paste
+#below extracts the first item in list from list of tuples
+#allPhoneNumbers =[}
+#for phoneNumber in extractedPhone
+# 		allPhoneNumbers.append(phoneNumber[0]
+
+Files
+
+#variables are fine to store data when program is running, if you want data to persist you need to save to file
+#strings to represent file paths and file namesd
+#need to escape the backslash when printing directories, or use raw string
+#import os
+#os.path.join ('folder1, 'folder2', 'folder3', 'file.png') - takes several sting arguments and formats file path specific to operating system
+#os.getcwd() - gets working directory
+#os.chdir('c:\\') - changes working directory
+#absolute file path which begins with root folder, complete location of program
+#relative file path is relative to current working directory
+# . and .. folders where . stands for this directory and .. stands for parent folder
+#os.path.abspath('spam.png') returns absolute path of file/folder
+#os.path.dirname - pulls out directory
+#os.path.basename - pulls off last folder/file
+#os.path.exists('') true if exists, false if not
+#os.path.getsize - gets size of a file/folder
+#os.listdir() - list of strings of file names of the folder that it is inside
+#os.makedirs('c:\\deli\\walnut\\waffles) - creates folders that you specify
+#os.path.isfile() - is file
+
+#hello.File = open('c:\\............') - opens in read mode
+#helloFile.read() - reads file content
+#helloFile.close() - closes file
+#helloFile.readlines() - reads and list in lines
+#helloFile = open('', 'w') opens in write mode, w=write, a=append
+eg
+#baconFile = open('bacon.txt, a)
+#baconFile.write('\n\nBacon is delicious')
+cont.
+#import shelve
+#shelfFile = shelve.open('mydata')
+#shelfFile['cats'] = ['Tisher', 'Zophie', 'Simon'] - (storing variables on the PC as files)
+#shelfFile.close()
+# possible list(shelfFile.keys/values) to get data
+
+#programs can organise things on harddrive
+#import shutil
+#shutil.copy('c:\\spam.txt', 'c:\\delicious') - copies first file to second
+#shutil.copytree('folder location', 'folder location') copies folder
+#shutil.move('folder location', 'folder location') moves from first to second
+#shutil.move('file/folder with location', 'file/folder with same location') has the effect of renaming the file.
+
+#os.unlink('file loc + name') - deletes file
+#os.rmdir('c:\\delicious') - deletes folder given it is empty (as a safeguard)
+#shutil.rmtree('c:\\delicious') - deletes entire folder and everything in it
+#be careful, do a dry run or use send2trash module
+#import send2trash
+#send2trash.send2trash(c:\\.............) deletes file to trash can, not permantly
+
+#import os
+#for folderName, subfolders, filenames in os.walk('c:\\delicious'):
+		print('The folder name is' + folderName)
+		print('The subfolder in ' + folderName 'are: ' + str(subfolders)
+		print('The filenames in ' + foldername + 'are: ' + str(filenames))
+		print() 																- walks a directory tree
+
+Debugging
+
+#fix bugs faster and with less effort
+#python raises an exception whenever it raises an invalid code
+#raising your own exceptions in your code 
+#If condition not met 
+#raise Exception('This is the error message.')
+#import traceback
+#errorFile = open('error_log.txt', 'a')
+errorFile.write(traceback.format_exc())
+errorFile.close()
+print('The traceback info was written error log.txt')
+#appends error log and line it occured to file error log in os.getcwd()
+#assertions 
+#assert False, 'This is the error message' - will evaluate to false if sanity checks fail
+#I assert that this conditon always holds true, program will crash after
+
+#Logging to debug code, logging module, create a breadcrumb trail of what program is doing
+#import logging
+#logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.debut('start of program') - labeling program
+#eg     logging.debug('i is %s, total is %s' % (i, total)) 
+#%s relates to the position in the brackets after eg 1st %s relates to i, 2nd to total "(i, total)"
+#logging.disable(logging.CRITICAL) - disables all log messages, substitute out log level with tier
+#log levels low->high: debug -> info -> warning -> error -> critical (highest)
+#hence, logging.debut creates a debug at the lowest level
+#logging.basicConfig(filename='debugLog.txt'...... - creates and saves debug to text file
+
+#Using the debugger - execute code one line at a time and wait for you to continue
+#examine variables at any given point in program lifetime
+#WATCH VIDEO ON PYCHARM DEBUGGER
+
+Webscrapping
+
+#import webbrowswer
+webbrowswer.open('www.google.com' + VARIABLE)  opens a url, concatenate
+#pass arguments through sys.argv to batch file 
+if len(sys.argv) >1:
+    # ['mapit.py', '11', 'Higher', 'Westlake', 'Road'] - join into a single string
+    address = ' '.join(sys.argv[1:])
+else:
+    address = pyperclip.paste() #if not through run, through clipboard
+
+#request module for downloading files from the web
+#import requests
+#res = requests.get('url with file to download') - downloads and stores in res
+#res.status_code - if 200, means everything went well
+#res.raise_for_status() - raises status if something went wrong
+#once stored in variable, need to write it to a file
+#playFile = open('RomeoAndJuilet.txt', 'wb') - wb is write binary and is required to maintain unicode encoding of text
+for chunk in res.iter_content(100000):
+		playFile.write(chunk) #each chunk is a playthrough of file in the res variable
+#requestmodule good if you have the exact url to download, if you dont might not be the best way to download
+
+#webscraping to pull information off webpages
+#downloading a webpage downloads it in html
+#f12 to open source code for site or use inspect element, requests would download the entire page code
+#pip install beautifulsoup4 - used for parsing html 
+#import bs4
+#download with requests to variable
+#soup = bs4.beautifulSoup(res.text. html.parser)
+#elems = soup.select('css path') - css selector - how do is specify a specific part of the document i want to look at (inspect element)
+#right click inspect element - copy css path
+#eg
+def getitemname(producturl):
+    res = requests.get(producturl)
+    res.raise_for_status()
+
+    soup = bs4.BeautifulSoup(res.text, 'html.parser')
+    elems = soup.select('#firstHeading')
+    return elems[0].text
+	
+name = getitemname('https://oldschool.runescape.wiki/w/Gold_necklace')
+
+#Selenium - sometimes webpages will require you to log in or require javascript
+#selenium launches webbrowswer that you can programatically control from program
+#harder and slower to run in background - pip install selenium
+#
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+#
+#browser = webdriver.Firefox()
+#browser.get('sends browser to url')
+#elems = browser.find_element(By.CSS_SELECTOR('css selector from inspect element')
+#elem.click() - clicks on element
+#elems = browser.find_elements_by_css_selector('p') - element(s) look for multiple elements
+#elem.send_keys('zophie') - sends keys into the text box
+#elem.submit() - enter/submits the text in the box
+#browser.back() - goes back
+#.forward - goes forward
+#.refresh - refreshes
+#.quit - closes browser
+#if you want entire webpage just css select grab 'html'
+#read selenium documentation
+
+Excel and PDFs
+
+Examples 1)
+
+import openpyxl
+wb = openpyxl.workbook()
+#creates a workbook in computer memory, loading most likely more useful
+wb = openpyxl.load_workbook('prices.xlsx')
+# set workbook
+ws = wb.active
+# sets worksheet, replace .active with ['Sheetname'] for specific sheet
+print(ws['C1'].value)
+#looks at the value of a cell
+ws['C1'] = 20
+print(ws['C1'].value)
+# value of the cell changed with ws['cell'] = xx
+print(wb.sheetnames)
+# gives names of sheets in the document
+wb.create_sheet('Test')
+print(wb.sheetnames)
+#creates new sheet
+ws.title = 'prices'
+# changes name of sheet
+ws.append(['Peter', 'Is', 'Sick'])
+# adds to bottom, doesnt override A1, A2, A3
+wb.save('prices.xlsx')
+# saves workbook, if ran twice with wb not loaded, wont create new wb
+
+Example 2)
+
+import openpyxl
+
+wb = openpyxl.load_workbook('prices.xlsx')
+ws = wb.active
+
+for row in range(1, 11):
+    for col in range(1, 5):
+        #completes first row A1B1C1D1 then onto next A2B2C2D2
+        char = openpyxl.utils.get_column_letter(col)
+        # takes integer between 1-26 and gives character corresponding
+        ws[char + str(row)] = char + str(row)
+
+wb.save('prices.xlsx')
+
+Other functions in excel
+ws.insert_rows(7) - inserts row at row 7, (delete will do opposite, likewise with col)
+ws.merge_cells('A1:D2') - merges cells in range (unmerge also) 
+ws.move_range('C1:D11', rows=2, col=2) - shifts range of cells over by specified row/col
+
+
+
+
+#pdf reading
+#binary files making harder than plain text, have pictures etc
+#import PyPDF2
+#import os - os.chdir('') to folder with pdf
+#pdfFile = open('pdfname.pdf' 'rb') - read binary
+#PyPDF2.PyPDF2.PdfFileReader(pdfFile)
+#reader.numPages - total number of pages in pdf
+#page = reader.getPage(0) - reads page and stores in variable
+#page.extractText() - returns page text as a string
+#for pageNum in range(reader.numPages):
+	print(reader.getPage(pageNum) - reads every page in PDF 
+#can also combine multiple PDFs and specific pages - NO NOTES TAKEN
+
+#word documents
+#pip install python-docx
+#import docx
+#d = docx.document('filelocationandname.docx')
+#d.paragraphs -stores paragraph objects or doc.paragraph
+#d.paragraph[0].text - shows the text in the first paragraph
+#p = d.paragraphs[1]
+#a run is a change in formatting like font or size
+#p.runs[0].text[0] -shows the first run of text formatting, eg italic - italic stopping at bold
+#p.runs[3].underline == true - will change formatting of the text to underline, bold, italic etc
+#d.save('file location.docx') - saves docx file
+#p.style = 'Title' - changes the style of the text eg title, normal etc
+#d=docx.document() - creates document in pc memory
+#d.add_paragraph('this is a paragraph') - adds paragraph to document
+#need to save with d.save otherwise only stored in memory
+#p.add_run('this is a new run') - adds new run to paragraph
+#p.runs - displays the runs in a paragraph
+#p.runs[1].bold = true - change formatting of the run
+
+EMAIL - skipped
+
+PyAutoGUI
+
+#graphical user information - programming a robotic arm
+#pip install pyautogui
+#import pyautogui
+#pyautogui.size() - screen resolution 
+#widtth, height = pyautogui.size() - stores w/h in seperate variables
+#pyautogui.position() - current position of mouse cursor
+#pyautogui.moveTo(x, y, duration =z)
+#pyautogui.moveRel(20, 0, duration-z) right/down(positiove) up/left (negative)
+#pyautogui.click(x, y) or just .click() to click in place
+#pyautogui.doubleClick() - rightClick, leftClick 
+#pyautogui.dragRel()
+#pyautogui has failsafe, dragging to top left to stop script
+#pyautogui.displayMousePosition() - get mouse coordinates (AHK for getmousepos), use in cmd
+
+#pyautogui.typewrite('', interval=0.2) - either a string or list or instructions 'left' 'right' etc
+#pyautogui.KEYBOARD_KEYS for all documentation on keys
+#pyautogui.press('')
+pyautogui.hotkey('ctrl', 'o')
+
+#so far has been blind
+#pillow imaging module
+#pyautogui.screenshot(), can call any method on this pillow object (chapter 17)
+#pyautogui.locateOnScreen('screenshotfile') - returns where on screen it can find image (x,y,w,h)
+#pyautogui.locateCenterOnScreen('screenshotfilelocandname')
+#pyautogui.moveTo()
+
+
+
+
+
+
+
+
+	
+
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

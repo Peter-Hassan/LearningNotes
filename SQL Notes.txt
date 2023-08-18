@@ -1,0 +1,1436 @@
+SQL Learning - Ultimate Beginner to Expert course
+
+https://www.hackerrank.com/domains/sql for practice
+
+Roadmap
+SQL -> Power BI -> Python refresh -> Mathematical Concepts(?) (Probability, Regression, Hypothesis Testing, ARMIMA Modeling/Econometrics ARCH/GARCH or TS Modeling)
+
+
+------------------------------------ 2: Getting Started and Installed -----------------------------------------
+
+What is a Database?
+
+- 1. Collection of data
+	- to do list
+	- files at the medical center
+	- phonebook . eg. alphabetical order, find specific person vs find all people with the same name
+		- need a way to search a database to get information from it
+	-DBMS (Database management system; MYSQL PostgreSQL ORACLE DB, SQLITE)
+		- Interface for that data
+		- App -> DBMS -> Database
+		- commands to DBMS -> database
+
+Difference between SQL and MYSQL?
+
+- 1. SQL is the language we use to talk to our database
+	- Find all users
+	- Find all users who are 18 yrs old
+		- These are queries, which go to the DB
+		- SELECT * FROM Users WHERE Age >=18; 
+- 2. Relational DBMS all use SQL
+	- Different RDBMS system may have differences in syntax but are identically similar in the use of SQL
+	- Once Learn one RDBMS, won't be hard to learn the others. 
+	- What makes them unique/different is the features they implement
+
+Installation
+
+- 1. Can use terminial to execute SQL, or use Workbench to save queries and execute them
+	- End result is exactly the same
+
+- 2. Windows, Default, root password = Password
+- 3. Lightning bolt runs entire script, second lightning bolt runs currently selected line of script
+- 4. To open: SQL command line or SQL workbench
+
+------------------------------------ 3: Creating Databases and Tables -----------------------------------------
+
+Creating Databases
+
+- 1. Within a DB server, you can have many cilos of Data which have nothing to do with each other
+	- Practice DB, Dogwalker DB etc (all seperate)
+	- Multiple DB within a DB server eg Dog walker -> Users, Dogs, Payment
+	<> are not included*
+	%% SHOW databases;
+	%% CREATE DATABASE <name>;
+		- should be a meaningful name, avoid spaces when naming DBs
+		- capitalisation also doesn't matter, however is convention to help it stand out
+	- Left side of workbench contains databases it knows about (may need refreshing)
+
+Dropping and using Databases
+
+- 1. %% DROP DATABASE <name>;
+	- Careful dropping actual databases
+- 2. %% USE <database name>
+	%% SELECT DATABASE(); (shows database you are currently working in)
+	- If in workshop, can doubleclick the database you want to work with instead of using USE
+
+Introducing Tables
+
+- 1. Tables - A collection of related data held in a structured format within a DB
+		- Headings/columns III
+		- Rows - entries into the table ---
+		- Get columns in to give table structure, then adding entries
+		
+Data Types
+
+- 1. What type of information is permitted in each column
+		- Doing things to data is difficult if not are the same DType
+		- Number types - INT, SMALLINT, TINYINT, MEDIUMINT, BIGINT, DECIMAL, NUMERIC, FLOAT, DOUBLE BIT
+		- STRING TYPES - CHAR, CARCHAR, VINARY, CARBINARY, BLOB, TINYBLOB, TEXT, MEDTEXT, 
+		- Look to documentation to look for differences between each specific datatype
+		- INT - Whole Number (signed) can be negative (2147483647)
+		- VARCHAR - Variable length string
+			 -VARCHAR(100) - specify max characters per entry
+		- Summary - Certain columns must be enforced as a certain DType
+		
+		EG Tweets Table
+		
+		Username			Content			likes
+		(Max 15 Char)		(max 140 Char)	number
+		VARCHAR(15)			varchar(140)	INT()
+		
+Creating Tables
+
+- 1. %% CREATE TABLE <tablename>
+			(	
+				column_name datatype,
+				column_name datatype
+			);
+			- SQL doesnt care about lines, seperate names with commas, end with (;)
+
+How do we know it worked?
+
+- 1. USE DATABASE, SHOW Tables
+		%% SHOW tables;
+- 2. %% SHOW COLUMNS FROM cats;
+- 3. %% DESC Cats; (describe structure with DTYPES)
+- 4. If working using Workbench, you can see columns and DTYPES without DESC
+
+Deleting Tables 
+
+- 1. DROP TABLE <tablename>;
+
+Create a pastries table example
+
+- 1. %% CREATE TABLE pastries
+			(
+				name VARCHAR(50),
+				quanity INT
+			);
+- 2. DESC pastries;
+- 3. DROP TABLE pastries;
+
+MYSQL comments
+
+- 1. Like python, can comment out code (--) for SQL instead of (#) for python
+- 2. If commenting out a block of code, can use (CTRL /) hotkey
+
+
+------------------------------------ 4: Inserting Data -----------------------------------------
+
+Insert the BASICS
+
+- 1. adding data into tables 
+		%% INSERT INTO cats(name, age)
+		%% VALUES ('Jetson', 7);
+		
+Quick Preview of SELECT
+
+- 1. %% SELECT * FROM cats; (give everything from cats table)
+
+Multiinserts 
+
+- 1. Order matters, have to follow order when inserting values in the prediscribed INSERT INTO (order)
+- 2. Can insert multile values into the same line of code
+		%% INSERT INTO cats(name, age)
+		%% VALUES ('turkey', 7)
+		%% VALUES ('blob', 7)
+		%% VALUES ('Jetson', 7);
+		
+Working with NOT NULL
+
+-1. Value indicating no values
+		-If set to NULL, can be set to empty
+		- Does not mean zero
+		
+		%% INSERT INTO cats(name) VALUES('Todd);
+			-as no value given for age, will be set as NULL
+2. If VALUES(); would make both values null
+	- When creating table, can add constraint after DTYPE: name VARCHAR(100) NOT NULL,
+	
+Sidenote Quotes in MYSQL
+
+- 1. If dealing with multiple "'" dealing with strings, like python, will cause error
+		- Instead, can escape that quote by using a backslash in front of it " \' "
+
+
+Adding Default VALUES
+
+- 1. like NOT NULL, can add a constraint: DEFAULT 'unnamed', age INT DEFAULT 99 etc
+- 2. Do we need to specify NOT NULL and DEFAULT?
+	- No not NULL VALUES because the have a default?
+		- Yes, as can set value after as NULL even if there is a default manully. 
+		- VALUES (NULL, NULL) 
+		
+Introducing Primary Keys
+
+- 1. Rows need unique IDS when data may look the same
+- 2. Add unique ID for each cat, for example, catID, that increments in 1 for each new entry
+- 3. Declare a column a primary key for a table, as a unique identifier for each individual row
+- 4. Can add PRIMARY KEY constraint for a column
+		%%CREATE TABLE cats(
+			cat_id INT NOT NULL PRIMARY KEY,
+			...);
+- 5. Redundant to specify as NOT NULL as cant be NOT NULL
+- 6. Auto-increment on PRIMARY KEY
+		- %% cat_id INT AUTOINCREMENT, 
+			 PRIMARY KEY(cat_id)
+		- No longer have to specify a cat ID when inserting values into table
+		
+Create Table Insert Exercise
+
+- 1. 	CREATE TABLE Employees (
+		employee_id INT auto_increment PRIMARY KEY,
+		first_name VARCHAR(20) NOT NULL,
+		last_name VARCHAR(20) NOT NULL,
+		middle_name VARCHAR(20), 
+		age INT NOT NULL,
+		current_status VARCHAR(20) DEFAULT 'Employed'
+		)
+
+		DESC Employees;
+
+		INSERT INTO Employees(first_name, last_name, age)
+		VALUES ('Thomas', 'Chickenman', 87);
+
+		SELECT * FROM Employees
+		
+------------------------------------ 5: CRUD BASICS -----------------------------------------
+
+The Basics of CRUD
+
+- 1. Create, Read, Update and Delete
+	- CREATE, read with SELECT, how to update table or delete single entries?
+	- expand on all these things
+
+Officially Introducing SELECT
+
+- 1. %% SELECT * FROM TABLE is what we have covered so far, where * is all columns for all rows
+- 2. %% SELECT name FROM cats; - gives only one column
+- 3. %% SELECT name, age FROM cats; multiple columns from one table
+
+The WHERE clause
+
+- 1. Currently selecting every single row, using where can narrow down search. (Not limited to working with SELECT)
+- 2. %% SELECT * FROM cats WHERE age = 4;
+- 3. %% SELECT name, age FROM cats WHERE age = 4; (dont have to select age if using age)
+	- code evaluates left to right
+- 4. %% SELECT * FROM cats WHERE name = 'Egg';
+
+~~Rapid Fire Exercise Completed
+
+Aliases
+
+- 1. When we select data, we can rename a column to make it shorter or easier to understand (just for this query)
+	- EG working with cat_id -> %% SELECT cat_ID AS id
+- 2. Rename column to make shorter or easier to understand
+
+Using Update
+
+- 1. How do we altar existing data?
+	- %% UPDATE cats SET breed = 'Shorthair' WHERE breed ='Tabby';
+	- Can update multiple rows at once by using a comma to seperate eg %% 'Shorthair' WHERE breed ='Tabby', 'Ginger' WHERE breed ='Blonde'
+	- Don't have to have WHERE, just targets what you are changing
+
+- 2. Good rule of thumb, SELECT whatever you are trying to update before you perform the UPDATE
+	- %% UPDATE cats SET age = 14 WHERE name ='Misty' 
+	-> %% SELECT * FROM cats WHERE name = 'Misty' 
+		- Good as a check to see what you're updating, same goes for deletion
+
+Introducing DELETE
+
+- 1. %% DELETE FROM cats WHERE name = 'egg';
+
+
+------------------------------------ 6: CRUD CHALLENGES -----------------------------------------
+
+## Inventory of closet, what to give away, sell, burn etc, 
+
+- 1. CRUD Challenge @@
+
+CREATE DATABASE shirts_db;
+
+USE shirts_db;
+
+CREATE TABLE shirts (
+    shirt_id INT AUTO_INCREMENT PRIMARY KEY,
+    article VARCHAR(50),
+    color VARCHAR(50),
+    shirt_size VARCHAR(5),
+    last_worn INT
+);
+
+DESC shirts;
+
+INSERT INTO shirts (article, color, shirt_size, last_worn)  
+VALUES 
+	('t-shirt', 'white', 'S', 10),
+	('t-shirt', 'green', 'S', 200),
+	('polo shirt', 'black', 'M', 10),
+	('tank top', 'blue', 'S', 50),
+	('t-shirt', 'pink', 'S', 0),
+	('polo shirt', 'red', 'M', 5),
+	('tank top', 'white', 'S', 200),
+	('tank top', 'blue', 'M', 15);
+### Add new shirt
+INSERT INTO shirts (article, color, shirt_size, last_worn)
+VALUES ('polo shirt','purple', 'M', 50);
+### Update all POLO SHIRTS TO large
+UPDATE shirts SET shirt_size ='L' where article='polo shirt';
+
+### Update shirt last worn 15 days ago to 0
+UPDATE shirts SET last_worn ='0' where last_worn='15';
+
+### Update all white shirts change size to XS and color to "off-white
+UPDATE shirts SET shirt_size = 'XS', color='off white' WHERE color='white';
+
+## Delete all old shirts last worn 200 days ago
+DELETE FROM shirts WHERE last_worn >= 200;
+
+## Delete all Tank tops
+DELETE FROM shirts where article='tank top';
+
+## Drop shirts Table
+DROP TABLE shirts;
+
+------------------------------------ 7: String Functions -----------------------------------------
+
+The World of String Functions
+
+- 1. A lot of what we do is writing fancy select queries to learn about our data
+- 2. String operations that we can perform on text columns
+- 3. Quick note - Possible to run queries from terminal (if location is set in terminal) with:
+		%% Source book_data.sql
+		
+CONCAT
+
+- 1. Working with table to concat different pieces of text from different rows
+- 2. %% SELECT CONCAT('h' 'e' 'l')
+		%% SELECT CONCAT(author_fname, ' ', author_lname) AS author_name FROM Books;
+			Gives a list of First + last name with space in between
+- 3. Concat with seperator CONCAT_WS(' - ')
+		%% SELECT CONCAT_WS('!', 'hi', 'bye', 'lol');
+			- ! is seperator between hi!bye!lol
+			
+SUBSTRING
+
+- 1. Works with parts of strings -> Large piece of text -> small piece of text out of it
+- 2. %% SELECT SUBSTRING('Hello World', 1, 4)
+			- Returns 'Hell' starting from position 1 up to 4 (not 0 like python)
+			- Can also use negative number (, -3) end to beginning
+			
+
+Combining CONCAT and Substring
+
+- 1. %% SELECT CONCAT(SUBSTRING(TITLE, 1, 10), '...') FROM BOOKS;
+		- Inside evaluates first, like python
+- 2. Select initials with . seperating them
+		SELECT CONCAT(
+			SUBSTR(author_fname, 1,1), '.', SUBSTR(author_lname, 1,1), '.'
+			) AS author_initials
+		FROM books;
+		
+Sidenote SQL Formatting
+
+- 1. Can beautiful SQL script using the paintbrush and selecting the script in SQL workbench
+- 2. Alternatively can use text editor like DBGate, webbrowser or VSCODE etc ~(codebeautify.org/sqlformatter)
+
+REPLACE
+
+- 1.  %% SELECT REPLACE(String operating on, what we want to replace, what we replace it with)
+	  %% SELECT REPLACE(title, ' ', '-') FROM books;
+	  
+REVERSE
+
+- 1. Reverses order of the string: Hello world -> dlrow olleH
+		%% SELECT Reverse('chicken nuggets')
+	
+CHAR_LENGTH
+
+- 1. Counts characters in a string
+- 2. Length() will return length in bytes, not identical for example kanji takes up more storage
+- 3. SELECT CHAR_LENGTH(title) FROM books;
+
+UPPER and LOWER
+
+- 1. Changes the casing of a string ie Uppercase Lowercase
+- 2. %% SELECT LOWER()
+- 3. %% SELECT UPPER()
+
+Other Functions
+
+- 1. INSERT - %% SELECT INSERT('Hello Bobby', 6,0, 'There'); Where first number (6) is the position, and 0 is replacing nothing
+	-  Can also replace characters into the next eg: 6,4 -> Hello Therby for above case
+- 2. LEFT/Right - get leftmost or rightmost characters from a string
+	- %% SELECT LEFT('omghahalol!', 3);   ->   omg ----> if right 'ol!'
+- 3. REPEAT - repeats a string a certain number of times
+	- %% SELECT REPEAT('ha', 4) --> hahahaha
+- 4. TRIM - remove spaces leading and trialing like split in python
+		-SELECT TRIM('  bar    '),  ----> bar
+		- can specifyc leading/trailing before with the character you want to remove
+		- SELECT TRIM(LEADING "X" FROM 'XXXXXXXXXXXXXbarXXXXXXXX') -> barXXXXXXXX
+
+
+------------------------------------ 8: Refining Selections -----------------------------------------
+
+Distinct 
+
+- 1. Uniques from a table, after select before a column name
+	%% SELECT DISTINCT author_lname FROM books;
+	%% SELECT DISTINCT CONCAT(author_fname, ' ', author_lname) from books;
+	-second way to select full distinct names
+		-SELECT DISTINCT author_fname, author_lname from books;
+
+ORDER BY
+
+- 1. %% SELECT book_id, author_fname, author_lname FROM books ORDER BY author_lname;
+- 2. %% SELECT book_id, author_fname, author_lname FROM books ORDER BY author_lname DESC;  --> will order by descending (or ASC for ascending)
+- 3. Can also do numbers instead of alphabetization
+	- %% SELECT title, pages FROM books ORDER BY pages DESC;
+- 4. Can also ORDER BY 2,. where 2 is the second column name, removing the need to fully type out name
+- 5. Can sort by multiple columns, orders by first column then second
+	-%% SELECT author_lname, released_year, title FROM books ORDER BY author_lname, released_year;
+- 6. Using an alias will allow you to reference tables drawn from queries later on
+
+LIMIT
+
+- 1. Control the number of results you get back
+	- %% SELECT book_id, title, released_year FROM books LIMIT 5;
+	- What if you want the first 5 books published in your dataset?
+		- %% SELECT book_id, title, released_year FROM books ORDER BY released_year LIMIT 5;
+- 2. Can change where you start from in the list with LIMIT 0,5
+	-starting at 0 going to 5
+
+LIKE 
+
+- 1. Fuzzier searching where not looking for exact match, so where = '' isnt as useful, not as strong as regular expressions
+- 2. WHERE author_fname LIKE '%da%'
+	- %'s are wildcards, meaning 0 or more characters
+	- %% select title, author_fname FROM books where author_fname LIKE '%da%'; 
+	- anything ending with an n could be LIKE '%n'
+- 3. another wildcard '_', where the underscore means one character
+	-can search for '_a_' that have a in or certain pattern
+- 4. May be times you want to match an underscore or percent sign, so you need to escape it with a backslash '%\%%'
+
+
+------------------------------------ 9: Aggregate Functions -----------------------------------------
+
+
+Count basics
+
+- 1. How many books are in the database?
+	- %% SELECT COUNT(*) FROM books; the * indicates rows, without counts columns
+	- %% SELECT COUNT(author_fname) FROM books; counts all values of first names in column
+	- %% SELECT COUNT(DISTINCT author_fname) FROM books;
+
+Group by
+
+- 1. Group by summarizes or aggregates indentical data into single rows
+	 -%% SELECT author_lname FROM books GROUP BY author_lname;
+	- behind the scenes, it is breaking down all rows for each author and returning them in memory
+	- we can use count to count those rows
+		- %% SELECT author_lname, COUNT(*) from books GROUP BY author_lname;
+- 2. Essentially, make groups and use aggregate function
+
+
+Min/Max
+
+- 1. Min lowest value in a column/group, max vice versa
+	- SELECT MIN(released_year) from books;
+	- SELECT max(pages) from books;
+
+Subqueries 
+
+- 1. Title of the longest book?
+	- can use order by and limit by 1 but also subqueries
+	- %% SELECT * FROM books 
+	     WHERE pages = (SELECT max(pages) from books); 
+		-in brackets will run subqueries first before evaluating the rest
+
+
+Grouping by multiple columns
+
+- 1. %% SELECT author_lname, count(*) from books group by author_lname, author_fname;
+	- grouping twice, by author lname and fname, meanign if two authors have the same name it wont group by only that
+
+Min and max with groupby
+
+- 1. SELECT author_fname, author_lname, min(released_year) from books GROUP BY author_fname, author_lname;
+
+SUM
+
+- 1. Sums values together
+	-SELECT SUM(pages) FROM books;
+- 2. Sum pages that each author has written:
+	- %% SELECT author_lname, count(*), SUM(pages) from books GROUP by author_lname;
+
+Average
+
+- 1. Calcualte the average released year across books as an example
+	- %% SELECT AVG(released_year) from books;
+
+Aggregate functions docs
+
+- 1. contains many more functions, std standard deviation, var_pop, var_samp, etc
+
+
+@@Aggregate functions exercise
+
+## How many books in the database?
+SELECT count(*) from books
+
+## How many books were released in each year
+SELECT released_year, count(*) from books group by released_year;
+
+## total number of books in stock
+SELECT sum(stock_quantity) from books; 
+
+## Find average released year for each author
+SELECT author_fname, author_lname, avg(released_year) from books group by author_fname, author_lname;
+
+## Find the full name of the author who wrote the longest book
+SELECT CONCAT(author_fname, ' ', author_lname) as fullname, pages from books WHERE pages = (SELECT MAX(pages) from books);
+
+## Create a table showing the year, how many books were released in that year, and the avg pages in each book of that year
+SELECT released_year, count(*), avg(pages) from books group by released_year ORDER BY released_year;
+
+------------------------------------ 10: Revisiting Data Types -----------------------------------------
+
+CHAR vs VARCHAR
+
+- 1. Both allow to store text
+- 2. VARCHAR optimised to store text of different sizes 
+- 3. What if not dealing with data where sizes vary and are fixed in size?
+	- CHAR: char has a fixed length, specify size which takes up less characters
+	- CREATE TABLE states (abbr CHAR(2));
+	- When using CHAR it will pad out the data with whitespace to fit the size, making it use more memory
+	- Optimised with data of a specific length
+
+
+INT, TINYINT, BIGINT
+
+- 1. Again, optimising storage where each of the max signed values they can take up, takes up less spsace
+	- tiny int = 127, small int = 32767, bigint 2^63 -1
+	- lower the int the less storage in bytes it takes up
+	- signed integers go from negative to postiive, can work with UNSIGNED (no negative sign) so that it only works in the positive direction when creating table
+
+
+DECIMAL
+
+- 1. If inserting fractional into int like 1.5, it will round the data up 
+	- DECIMAL(5,2) - stores precise decimals where (total digits per number, number after the decimal) eg. 999.99 5 digits, 2 after decimal
+	- %% CREATE TABLE products (Price DECIMAL(5,2));
+	- %% insert into products(price) values (123.32);
+
+FLOAT and DOUBLE
+
+- 1. FLOAT and DOUBLE can store larger number or more decimal points with less storage however comes at the cost of precision
+	-precision issues after 7 decimals for float, 14 for double
+	  
+
+DATES and TIMES
+
+- 1. DATE 'yyyy-mm-dd' format, values with a date but no time
+- 2. TIME 'HH:MM:SS' values with time but no date, 
+- 3. DATETIME 'yyyy-mm-dd HH:MM:SS'
+- 4. CREATE TABLE people (
+	name VARCHAR(100),
+	birthdate DATE,
+	birthtime TIME,
+	birthdt DATETIME
+	);
+	
+	INSERT INTO people (name, birthdate, birthtime, birthdt) 
+	VALUES ('Elton', '2000-12-25', '11:00:00', '2000-12-25 11:00:00');
+
+	INSERT INTO people (name, birthdate, birthtime, birthdt)
+	VALUES ('Lulu', '1985-04-11', '9:45:10', '1985-04-11 9:45:10');
+
+	INSERT INTO people (name, birthdate, birthtime, birthdt)
+	VALUES ('Juan', '2020-08-15', '23:59:00', '2020-08-15 23:59:00');
+
+CURDATE CURTIME and NOW
+
+- 1. Don't have to type out current date and time but can do it dynamically 
+- 2. %% select curtime(); 
+     %% select curdate();
+     %% select now();  
+	
+	INSERT INTO people (name, birthdate, birthtime, birthdt)
+	VALUES ('Hazel', curdate(), curtime(), now());
+
+Date functions
+
+- 1. DAY() gives the day of the month from birthdate
+	% SELECT birthdate, DAY(birthdate) from people
+- 2. DAYOFWEEK() gives the day of the week (1-7) monday being 1 sunday being 7
+	% SELECT birthdate, DAYOFWEEK(birthdate) from people;
+- 3. DAYOFYEAR() gives the day position in that year
+- 4. MONTHNAME() returns the name of month
+- 5. WEEK() week number 1-52
+- 6. If passing a time, a lot of these functins wont work as there is no date present, will however work with datetime format
+
+Time functions
+
+- 1. HOUR() gets hour from a time
+- 2. MINUITE() gets minute from a time 
+- 3. SECOND() gets seconds from a time
+
+Formatting dates
+
+- 1. Say you want for each person their month, day and year eg 'April 11 1985'
+	-SELECT Concat(MONTHNAME(birthdate),' ', DAY(birthdate),' ', YEAR(birthdate)) from people;
+	-There is also date format
+- 2. DATE_FORMAT(date, format)
+	- %% SELECT DATE_FORMAT(birthdate, '%a, %e, %b') from people;
+	- lots of specifiers in the format section to get what you want
+		-%a weekday
+		-%b month name
+		-%e day numbe rin month
+		-%D suffix with day es 1st, 2nd, 3rd
+		-%H hours 24hr format
+		-%i minutes
+		- many more specifies in documentation 
+
+Date math functions
+
+- 1. How many days between two dates or year anniversairy of someones account creation
+- 2. DATEDIFF(expr1,expre2) - Will subtract days between two dates
+	%% SELECT DATEDIFF(CURDATE(), birthdate) FROM people;
+- 3. DATE_ADD(date, INTERVAL expres1) eg INTERVAL 1 DAY, INTERVAL 1 YEARS
+- 4. TIMEDIFF(expres1, expres2) - difference between two times, ADDTIME, look at docs etc
+
+TIMESTAMPS
+
+- 1. Used for values that contain both date and time, like DATETIME, however takes up less storage than datetime because they support a lower range of dates
+	- SELECT TIMESTAMP ('yyyy-mm-dd HH:MM:SS'
+	- additionally has functions like TIMESTAMP DIFF, ADDTIMESTAMP ETC
+
+DEFAULT and ON UPDATE TIMESTAMPS
+
+- 1. CREATE TABLE captions(
+	text VARCHAR(100), 
+	created_at TIMESTAMP default CURRENT_TIMESTAMP
+	);
+		- creates a timestamp at the default CURRENT_TIMESTAMP
+
+- 2. CREATE TABLE captions2 (
+  	text VARCHAR(150),
+ 	created_at TIMESTAMP default CURRENT_TIMESTAMP,
+  	updated_at TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	);
+		- ON UPDATE CURRENT_TIMESTAMP, whenever updates updates the timestamp where it was updated
+
+
+@@DATA TYPES EXERCISES
+
+# What is a good use case for CHAR
+When you're dealing with data that has a limited amount of characters for instance someones initials
+
+# Good types for this table :
+CREATE TABLE inventory (
+    item_name ___________, Answer: Could be VARCHAR(20)
+    price _____________,   Answer: Could be DECIMAL(5,2) or FLOAT, not as applicable as prices tend to be 2dp and would take up more storage
+    quantity _________     ANSWER: INT, no need to complicate, no decimals or half quantity
+);
+
+# Differences between datetime and timestamp
+Date time uses more bytes, and timestamp is limited in range in years, starting in 1970
+
+# Print out the current time
+SELECT CURTIME();
+
+# print out the current date without the time
+SELECT CURDATE()
+
+# print ot current day of week as a number
+SELECT DAY(CURDATE());
+
+#print current day in text not number
+SELECT DATE_FORMAT(CURDATE(), '%a');
+
+#print current date and time in mm/dd/yyyy format
+SELECT DATE_FORMAT(CURDATE(), '%c/%d/%Y');
+
+#print out current dat and time using this format: January 2nd at 3:15
+SELECT DATE_FORMAT(NOW(), '%M %D at %r');
+
+# Create tweets table that stores tweet content, user name and time it was created
+CREATE TABLE tweets(
+	content VARCHAR(100),
+	Username VARCHAR(15),
+	created_time TIMESTAMP default CURRENT_TIMESTAMP
+	);
+
+
+------------------------------------ 11: Comparison and logical operators -----------------------------------------
+
+Not Equal
+
+- 1. %% SELECT title FROM books WHERE released_year != 2017;	
+		!= indicates not equal, = equal
+
+NOT LIKE
+
+- 1. %% SELECT title FROM books WHERE title LIKE '% %';	
+	- can use NOT LIKE where it will return books where there is no match to this pattern
+	- SELECT title, author_fname, author_lname FROM books WHERE author_fname NOT LIKE '%da%'	
+
+
+GREATER THAN
+
+- 1. '>' SELECT * FROM books WHERE released_year > 2000;
+- 2. If something evaulated to true IE boolean 1, eg SELECT 80>40; will return 1 as is true
+
+LESS THAN OR EQUAL TO
+
+- 1. '<'SELECT * FROM books WHERE released_year < 2000;
+- 2. Also can use <= or >= looking for equal or greater/less than
+
+LOGICAL AND
+
+- 1. Previously have looked at comparison operators, now will look at logical operators 
+- 2. %% SELECT title, author_lname, released_year FROM books
+	WHERE released_year > 2010
+	AND author_lname = 'Eggers'
+		- AND operator will join together 2 or more pieces of logic
+
+LOGICAL OR
+
+- 1. %% SELECT title, author_lname, released_year FROM books
+	WHERE author_lname='Eggers' OR
+	released_year > 2010;
+		- Don't have to satify first comparison, left or right can be true
+- 2. %% SELECT title, pages FROM books where pages < 200 OR title LIKE '%stories%'; as an example
+
+BETWEEN
+
+- 1. Can actually use between without between with comparison operators however there is explicitly an logical operator for it
+	-without : %% SELECT title, released_year from books WHERE released_year >= 2004 and released_year <=2015;
+	-with between: SELECT title, released_year from books WHERE released_year BETWEEN 2004 and 2015;
+- 2. NOT BETWEEN - same premise as NOT LIKE, will count outside the range and exlude in range
+
+
+COMPARING DATES
+
+- 1. Can use operators to make date comparison	
+	- select people born before 2005
+		- SELECT * FROM people WHERE birthdate < '2005-01-01'; SQL will recognise a string as some sort of date format
+	-alternatively extract year from birthdate
+		- SELECT * FROM people WHERE YEAR(birthdate) < 2005;
+		- SELECT * FROM people where HOUR(birthtime) > 9;
+- 2. Another option is CAST(expres as TYPE [array]) : this means to cast some value as some time, explicitly say to SQL that the value is of type (TYPE)
+		- SELECT CAST('09:00:00' as TIME);
+
+- 3. Examples :
+	SELECT * FROM people WHERE birthtime 
+	BETWEEN CAST('12:00:00' AS TIME) 
+	AND CAST('16:00:00' AS TIME);
+
+	SELECT * FROM people WHERE HOUR(birthtime)
+	BETWEEN 12 AND 16;
+
+THE IN OPERATOR
+
+- 1. What if you're looking in a book list for authors, using the OR operator to find them all, what if there are too many?
+	-would require WHERE ..... OR a lot
+	-solution is IN operator followed by list of the data ('x', 'x', ...)	
+		-where author_lname IN('Carver', 'Lahiri', 'Smith')
+		- %% SELECT title, author_lname from books WHERE author_lname IN('Carver', 'Lahiri', 'Smith');
+- 2. Also a NOT IN operator to exclude the data in the list
+- 3. If looking for even results or odd, can use the modulous indicator % (If % 2=0, then even)
+	- SELECT title, released_year FROM books 
+	  WHERE released_year >= 2000 AND released_year % 2 !=0;
+
+CASE
+
+- 1. Assigning different values conditonally
+     Say you want to assign a new column, like genre, to a data set. This would tell say literature before 2000 is 20th cent, and prior is modern lit.
+	- Quite like pythons IF, conditional ELSEIF ELSE etc
+	- select from title, released year and a CASE statement
+	- SELECT title, released_year,
+		CASE
+	          WHEN released_year >= 2000 THEN 'modern lit'
+                  ELSE '20th century lit' 
+		END AS genre
+		FROM books;
+
+- 2. Another example, giving a visual indication as to stock levels:
+	
+	SELECT title, stock_quantity,
+   	 CASE
+          WHEN stock_quantity BETWEEN 0 AND 40 THEN '*'
+          WHEN stock_quantity BETWEEN 41 AND 70 THEN '**'
+          WHEN stock_quantity BETWEEN 71 AND 100 THEN '***'
+          WHEN stock_quantity BETWEEN 101 AND 140 THEN '****'
+          ELSE '*****'
+         END AS stock
+	FROM books;
+
+IS NULL
+
+- 1. working specifically with null values cant use = null, have to use IS NULL, or IS NOT NULL
+	- SELECT * FROM books WHERE title IS NULL;
+
+
+@@EXERCISES
+
+# Select all books before 1980
+SELECT * from books WHERE released_year <1980;
+
+# Select all books written by EGGERS or Chabon
+SELECT * from books WHERE author_lname = 'Eggers' OR author_lname = 'Chabon';
+
+# Select books with page count between 100 and 200
+SELECT * FROM books where pages BETWEEN 100 AND 200;
+
+#SELECT all books where author_lname starts with C or S
+SELECT * FROM books WHERE author_lname LIKE 'C%' OR author_lname LIKE 'S%';
+
+#If title contains stories - give type short stories, if contains 'just kids' and 'a heartbreaking work' -> memoir, everything else should be a novel
+SELECT title, author_lname, 
+CASE
+	WHEN title LIKE '%stories%'THEN 'Short Stories'
+	WHEN title LIKE '%just kids%' THEN 'Memoir'
+	WHEN title LIKE '%heartbreaking%' THEN 'Memoir'
+	ELSE 'Novel'
+END AS TYPE
+FROM BOOKS;
+
+
+# Create the table
+SELECT author_fname, author_lname, CONCAT(COUNT(*), ' Books') AS count FROM books GROUP BY author_fname, author_lname;
+
+alternatively, with correct grammar (not all with books): 
+
+SELECT author_fname, author_lname,
+	CASE
+        WHEN COUNT(*) = 1 THEN '1 book'
+        ELSE CONCAT(COUNT(*), ' books')
+	END AS count
+FROM books
+WHERE author_lname IS NOT NULL
+GROUP BY author_fname, author_lname;
+
+------------------------------------ 12: Constraints and ALTAR TABLE -----------------------------------------
+
+
+UNIQUE constraint
+
+- 1. More unique ways of setting up constraints on a table
+- 2. Adding a UNIQUE restraint will stop the possibility of duplicate entries being added on that criteria
+	-CREATE TABLE contacts(
+    		name VARCHAR(100) NOT NULL,
+    		phone VARCHAR(15) NOT NULL UNIQUE
+    	);
+		- Phone number has to be unique
+
+CHECK constraints
+
+- 1. Custom restraints on a column(s), eg making sure that age column >18
+		%% CREATE TABLE partiers (
+			name VARCHAR(50),
+			age INT check (age>18)
+			);
+- 2.	CREATE TABLE palindromes (
+		word VARCHAR(100) CHECK REVERSE(word = word);
+			- will check if word is the same backwards
+			
+Named Constraints
+
+- 1. SQL gives default name for check however its possible to name the constraint
+	 CREATE TABLE partiers2(
+	 name VARCHAR(50),
+	 age INT,
+	 CONSTRAINT age_over_18 CHECK (age > 18)
+	 );
+  
+Multiple column constraints
+
+- 1. Say for instance one column doesnt need to be unique, but a combination of columns does: example - name and address
+	CREATE TABLE companies (
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    CONSTRAINT name_address UNIQUE (name , address)
+	);
+
+ALTER TABLE Adding columns
+
+- 1.  %% ALTER TABLE companies ADD COLUMN phone VARCHAR(15); 	- will set to NULL by default, or can say NOT NULL, which will add empty string or 0 for number columns
+		- alternatively can use DEFAULT 
+		
+ALTER TABLES Dropping column 
+
+- 1. ALTER TABLE companies DROP COLUMN phone;
+
+ALTER TABLE Renaming
+
+- 1. RENAME TABLE companies TO suppliers;
+		- or.. ALTER TABLE suppliers RENAME TO companies; 
+		
+- 2. What about renaming columns?
+		- ALTER TABLE suppliers RENAME COLUMN name TO company_name;
+		
+ALTER TABLE Modify
+
+- 1. ALTER TABLE suppliers MODIFY company_name VARCHAR(100) DEFAULT 'unknown';
+- 2. If you want to rename and modify the dtype or constraits use CHANGE 
+		- %% ALTER TABLE companies CHANGE company_name name VARCHAR(50);#
+		
+ALTER TABLE Constraints
+
+- 1. ALTER TABLE houses ADD CONSTRAINT positive_pprice CHECK (purchase_price>=0);
+- 1. ALTER TABLE houses DROP CONSTRAINT positive_pprice CHECK;
+
+
+
+------------------------------------ 13: One to Many and Joins -----------------------------------------
+
+Data is messy 
+- 1. So far have been working with simple data, typically not how real world works and data is interrelated
+	- will be working with multiple tables
+	
+Relationship basics 
+
+- 1. If you have two tables, orders cusotmers, movies reviews, students teachers, how are they releated? 
+	- One to one relationship (less common)
+	- One to many relationship: eg books have many reviews but reviews belong to one book 
+	- Many to many relationship: books can have many authors and authors can have many books
+	
+One to many relationships
+
+- 1. Customers and orders as a starting example (two tables that are a 1 to many relationship)
+		-One customer can have many orders, however each of those orders are associated with one person AKA One to Many
+		- What we want to store (simplistically) : first and last name, email., date of purchase, price of order
+			- could do in one table however there are some issues, eg duplicated information if one person orders more than once	
+			- another issue, customers who have accounts but havent yet placed orders, makes the order date and amount NULL
+				- hence, not a great way of doing it
+- 2. So how do we do it?
+		- have two tables, one for customers and one for orders, have a reference in order table to customers using a customer_id
+		- PRIMARY KEY INT AUTO_INCREMENT - Unique reference
+		- FOREIGN KEY: reference to a given table in another table 
+
+
+Working with FOREIGN KEY
+
+- 1. CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50)
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE -- FOREIGN KEY (name) REFERENCES table(name) ON DELETE CASCADE
+);
+
+INSERT INTO customers (first_name, last_name, email) 
+VALUES ('Boy', 'George', 'george@gmail.com'),
+       ('George', 'Michael', 'gm@gmail.com'),
+       ('David', 'Bowie', 'david@gmail.com'),
+       ('Blue', 'Steele', 'blue@gmail.com'),
+       ('Bette', 'Davis', 'bette@aol.com');
+       
+       
+INSERT INTO orders (order_date, amount, customer_id)
+VALUES ('2016-02-10', 99.99, 1),
+       ('2017-11-11', 35.50, 1),
+       ('2014-12-12', 800.67, 2),
+       ('2015-01-03', 12.50, 2),
+       ('1999-04-11', 450.25, 5);
+
+- 2. If trying to insert a value where a customer doesnt exist will not let you 
+		%% INSERT INTO orders ( order_date, amount, customer_id) VALUES ('2022-11-11', 78.99, 54)	   
+		
+		
+CROSS Joins ( Not very useful)
+
+- 1. Joining from different tables
+	- doing it in two queries
+	- SELECT id FROM customers WHERE last_name = 'George';
+	  SELECT * FROM orders WHERE customer_id = 1;
+	- Subquery method - SELECT * FROM orders WHERE customer_id = (SELECT id FROM customers WHERE last_name = 'George');
+		-Very clunky, also onyl for one customer
+- 2. Cross join - every single row from customers and combine with every single row in orders
+				- COMBINES EVERYTHING very rudamentry method of joining
+				- SELECT * FROM customers, orders;
+				- Not very useful at all, and output doesn't really make sense
+				
+Inner Joins 
+
+- 1. Three main type of joins that are covered: imagine vendiagram with 2 cirlces A+B
+		- Inner joins (middle of A+B)
+		- left joins  (left + middle A+B)
+		- right joins  (right + middle A+B)
+		
+- 2. %% SELECT * FROM customers
+		JOIN orders ON orders.customer_id = customers.id;
+			- can slim down results by selecting specific things, definitely needed if dealing with big tables
+			
+INNER JOIN with GROUP BY
+
+- 1. SELECT first_name,last_name, SUM(amount) as total FROM customers
+	 JOIN orders on orders.customer_id = customers.id
+	 GROUP BY first_name, last_name
+	 ORDER BY total;
+	
+LEFT JOIN
+
+- 1. Select everything from A, along with any matching records in B
+		- In INNER JOIN, only get the matching, whereas with left join, get everything from the left table and the overlap matching
+		%% SELECT first_name, last_name, order_date, amount FROM customers
+		   LEFT JOIN orders ON orders.customer_id = customers.id;
+- 2. Why do this?
+		- Can reveal certain information 
+			- In this instance will reveal information of customers that havent yet placed an order
+			
+LEFT JOIN with GROUP BY 
+
+- 0. IFNULL(SUM(AMOUNT), 0) : Essentially will replace NULL with another value if it isnt present
+
+- 1. %% SELECT first_name, last_name, IFNULL(SUM(amount), 0) as money_spent FROM customers
+		LEFT JOIN orders on customers.id = orders.customer_id
+		GROUP BY first_name, last_name;
+		
+RIGHT JOIN
+
+- 1. Select everything from B along with any matching records in A 
+		SELECT first_name, last_name, order_date, amount FROM customers
+        RIGHT JOIN orders ON customers.id = orders.customer_id;
+		- In this instance the same as Inner, due to the fact there would be no columns that dont have customer.id in orders, makes no sense 
+		
+ON Delete Cascade
+
+- 1. What should happen if a customer is deleted from the database?
+		- for example, if trying to delete id_1 from table, it will fail the foreign key constaint because the orders table has to have a customer id
+		- How to solve?
+			- Update customer ID on deletion to NULL or 0, and then delete
+			- Or delete everything from both tables
+
+- 2. ON DELETE CASCADE (after the foreign key or add on with ALTER TABLE)
+	- Will delete all information relating to the customer ID
+	
+@@JOIN EXERCISE
+	
+CREATE TABLE students (
+id INT  PRIMARY KEY AUTO_INCREMENT NOT NULL,
+first_name VARCHAR(30)
+);
+
+CREATE TABLE papers(
+title VARCHAR(50),
+grade INT,
+student_id INT,
+FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+#INNER JOIN showing who has a grade for an assignment 
+SELECT first_name, title, grade FROM students
+JOIN papers ON students.id = papers.student_id;
+
+#LEFT JOIN showing all students who have a grade and students who havent submitted a papers, with title showing as missing, grade showing as 0 if NULL
+SELECT first_name, IFNULL(title, 'MISSING'), IFNULL(grade,0) FROM students
+LEFT JOIN papers ON students.id = papers.student_id;
+
+#AVERAGE GRADE FOR PAPERS SUBMITTED
+SELECT first_name, IFNULL(AVG(grade),0) FROM students
+LEFT JOIN papers ON students.id = papers.student_id
+GROUP BY first_name
+ORDER BY SUM(grade) DESC;
+
+# Show average grades but add a column showing if they are passing or not based on the grade being over 75
+SELECT first_name, IFNULL(AVG(grade),0), CASE
+											WHEN IFNULL(AVG(grade),0) >=75 THEN 'PASSING'
+											ELSE 'FAILING'
+											END AS 'PASSING_STATUS'
+										FROM students
+										LEFT JOIN papers ON students.id = papers.student_id
+										GROUP BY first_name
+										ORDER BY SUM(grade) DESC;
+
+
+
+
+------------------------------------ 14: Many to Many and Joins -----------------------------------------
+
+Many to Many Basics
+
+- 1. Section will be more like a code along
+- 2. Some examples of MANY:MANY
+		- Books <-> Authors : Books can have many authors, authors can have many books
+		- Blog Post <-> Tags : Blog posts can have many tags, tags can have many blog posts
+		- Students <-> Classes : Students can have multiple classes, Classes can have multiple students
+- 3. Building a TV show reviewing application:
+	- Can have a series where a user can review a tv show	
+	- Require a join table, or union table
+	- Series Data <-> Reviewers Data
+		- Two series have nothing to do with each other, another table Reviews data to associate them
+		
+Creating TABLES for MANY:MANY
+
+-- 1. CREATE TABLE reviewers (
+	id INT PRIMARY KEY auto_increment,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL
+    );
+    
+	CREATE TABLE series (
+	id INT PRIMARY KEY auto_increment,
+    title VARCHAR(100),
+    released_year YEAR, 
+    genre VARCHAR(100)
+    );
+
+	CREATE TABLE reviews (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    rating DECIMAL(2,1),
+    series_id INT,
+    reviewer_id INT,
+    FOREIGN KEY (series_id) REFERENCES series(id), 
+    FOREIGN KEY (reviewer_id) REFERENCES reviewers(id)
+    );
+		
+@@TV SERIES Challenge 1
+
+# Title with rating table
+SELECT title, rating FROM series
+JOIN reviews ON reviews.series_id = series.id;
+
+@@TV SERIES Challenge 2
+
+#Average rating and title
+SELECT title, ROUND(AVG(rating), 2) as avg_rating FROM series
+JOIN reviews ON reviews.series_id = series.id
+GROUP BY series_id -- or title
+ORDER BY avg_rating;
+- 1. ROUND FUNCTION ROUND(x, number of digits)
+
+@@TV SERIES Challenge 3
+
+#Match up reviewers first and last name to their rating
+SELECT first_name, last_name, rating FROM reviewers
+JOIN reviews on reviewers.id = reviews.reviewer_id;
+
+@@TV SERIES Challenge 4
+
+#Identify the series that have no reviews
+SELECT title AS unreviewed_series FROM series
+LEFT JOIN reviews ON reviews.reviewer_id = series.id
+WHERE rating IS NULL;
+
+@@TV SERIES Challenge 5
+
+#TV Series Genre and avg_rating
+SELECT genre, AVG(rating) as avg_rating FROM series
+JOIN reviews ON series.id = reviews.series_id
+GROUP BY genre
+ORDER BY avg_rating;
+
+@@TV SERIES Challenge 6
+
+#first name, last name, count of reviews they have left, min review, max review, avg review, status ACTIVE/INACTIVE depending on whether someone has left a review or not
+SELECT first_name, 
+last_name, 
+COUNT(rating), 
+IFNULL(MIN(rating),0), 
+IFNULL(MAX(rating),0), 
+ROUND(IFNULL(AVG(rating),0),2), 
+IF(COUNT(rating) >0, 'ACTIVE', 'INACTIVE') AS status FROM reviewers
+LEFT JOIN reviews ON reviewers.id = reviews.reviewer_id
+GROUP BY first_name, last_name;
+
+@@TV SERIES Challenge 7
+
+# Title, rating, reviewer, requires two joins 
+SELECT title, CONCAT(first_name, ' ', last_name) as full_name, rating FROM reviews
+JOIN series ON reviews.series_id = series.id
+JOIN reviewers ON reviews.reviewer_id =  reviewers.id;
+
+	
+------------------------------------ 15: View modes and more -----------------------------------------
+
+Introducing Views
+
+- 1. Take a query that takes some sort of result and treat it like a real table, means you dont have to retype/copy paste code over and over
+   -CREATE VIEW full_reviews AS
+	SELECT title, released_year, genre, rating, first_name, last_name FROM reviews
+	JOIN series ON series.id = reviews.series_id
+	JOIN reviewers ON reviewers.id = reviews.reviewer_id;
+
+- 2. Can execute SQL code on this virtual table, allowing SQL code to be much shorter
+
+
+Updateable Views
+
+- 1. May act like a table, look like a table but are not actually a table hence there are some limitations using views
+	- Updatable, deleting and joining, inserting into wont work for above but will for simplier
+		- depends on the contents of the view: contains agg functins, subqueries, joins etc
+		- a simple series will be updatable: for example..
+		CREATE VIEW ordered_series AS
+		SELECT * FROM series ORDER BY released_year;
+
+Replacing Altering Views
+
+- 1. May need to update a view if changes have been made to the query, or the structure of tables etc
+- 2. CREATE OR REPLACE VIEW --updated sql code
+
+HAVING Clause 
+
+- 1. Used to filter the groups that you get back from GROUP BY
+		- SELECT title, AVG(RATING) from full_reviews GROUP BY title;
+			- what about when you want to limit search to data with more than one review?
+		- the HAVING clause specifies conditions on groups formed by the GROUPED BY clause
+			-%% SELECT title, AVG(RATING), COUNT(RATING) as review_count from full_reviews 
+				GROUP BY title HAVING COUNT(rating) > 1;				
+- 2. Different from WHERE as this specifies what youre selecting, whereas HAVING controls what groups to include 
+
+WITH ROLLUP
+
+- 1. Rolls up groups and generates higher level summary statistics 
+			AVG generated from all titles generated
+		%% SELECT title, AVG(RATING) from full_reviews GROUP BY title WITH ROLLUP;
+		
+SQL MODES
+
+- 1. Settings you can turn on and off to change behaviour and  data validations of SQL 
+- 2. Viewing modes, GLOBAL (all default) vs SESSION (current defaults of session)
+		- %%SELECT @@GLOBAL.sql_mode;
+		- %%SELECT @@SESSION.sql_mode;
+- 3. Changing or Disabling Modes
+		- %%SET SESSION sql_mode = 'modes'; --modes is the output of SELECT @@SESSION.sql_mode, where you can omit what you dont want to include inside
+		- eg removing division by zero warning, turns off warning and would replace with NULL
+		
+- 4. STRICT TRANS TABLES
+		- How sql manages invalid or missing value in data-change statements string into int, int into string, value out of range etc
+		- removing takes away error and adds warning, adding a string where dtype is decimal would convert to 0, makes no sense to take off
+		
+
+------------------------------------ 16: Window Functions -----------------------------------------
+
+Introducing window functions
+
+- 1. perform aggregate operations on groups of rows,but they produce a result for EACH ROW
+		- GROUP BY for example, would group rows based on a criteria and collapse into a single row with an aggregate function (min/max/avg)
+		- window functions allows us to look at aggregate information without collapsing categories down into single rows
+		- windows data - grouped together with some data which is reintegrated alongside the initial rows as the output
+		
+USING OVER
+
+- 1. As seen previously can use group by to get an average (old content)
+		%% Select department, AVG(salary) FROM employees
+		   Group BY department;
+     - OVER() CLAUSE gives an average for every row in a window without collapsing like group by
+		- SELECT emp_no, department, salary, AVG(salary) OVER() FROM employees;
+		- OVER() gives value for every row in the window
+		
+%%	SELECT 
+		emp_no, 
+		department, 
+		salary, 
+		MIN(salary) OVER(),
+		MAX(salary) OVER()
+	FROM employees;
+	
+PARTITION BY 
+
+- 1. OVER(PARTITION BY department) for example: instead of partitioning by all rows as default OVER(), can partition into smaller groups/windows
+		%% SELECT emp_no, department, salary, 
+			AVG(salary) OVER(PARTITION BY department) AS dept_avg,
+			AVG(salary) OVER() AS company_avg
+			FROM employees;
+			
+ORDER BY with OVER()
+
+- 1. similar in that it changes the order of rows, but will change the order of the rows inside of each window
+		- can also enable a rolling average/sum (other aggregate functions like max/min wont roll because will always returns a single value for the window)
+			- behaviour of functions changes based on how they are organised in the window eg DESC ASC
+		
+		%% SELECT emp_no, department, salary, 
+			SUM(salary) OVER(partition by department) as total_dept_salary, -- sums department salary and displays alongside each row
+			SUM(salary) OVER(partition by department ORDER BY salary) as rolling_dept_salary -- orders inside the windows and creates a rolling sum for each department
+			from employees;
+			
+RANK () -- WINDOWFUNCTION
+
+- 1. Will rank based on number (1-x) and isnt the same as counting
+		%% SELECT emp_no, department, salary,
+			RANK() OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_rank, -- partitioning ranks by department rank
+			RANK() OVER(ORDER BY salary) as overall_rank
+			FROM employees;
+			
+DENSE_RANK AND ROW_NUMBER 
+
+- 1. ROW_NUMBER() label each row in a partition, counting sequentially
+		- not the same as rank, due to the potential for values to be the same
+		
+		%% SELECT emp_no, department, salary,
+			ROW_NUMBER() OVER(PARTITION BY department ORDER BY salary DESC) as dept_row_number,
+			RANK() OVER(PARTITION BY department ORDER BY salary DESC) as dept_salary_rank, -- partitioning ranks by department rank
+			RANK() OVER(ORDER BY salary DESC) as overall_rank
+			FROM employees
+			ORDER BY department;
+- 2. DENSE_RANK() will skip a value after a rank has the same rank: eg 7,7,9 (8 skipped)
+	
+	
+NTILE
+
+- 1. Divides a partition into (N) buckets 
+	SELECT emp_no, department,  salary,
+    NTILE(4) OVER(PARTITION BY department ORDER BY salary DESC) AS dept_salary_quartile,
+	NTILE(4) OVER(ORDER BY salary DESC) AS salary_quartile
+	FROM employees;
+	
+FIRST_VALUE
+
+- 1. Returns the value of the expression from the first row of the window frame
+	%% SELECT emp_no, department, salary,
+    FIRST_VALUE(emp_no) OVER(PARTITION BY department ORDER BY salary DESC) as highest_paid_dept,
+    FIRST_VALUE(emp_no) OVER(ORDER BY salary DESC) as highest_paid_overall
+	FROM employees;
+- 2. also LAST_VALUE and NTH_VALUE(exp, n) where you are looking for a different position
+
+LEAD AND LAG (LEAD, number)
+
+- 1. LAG will return value from previous expression and LEAD will return next expressions value
+	- often used to calcualte differences between rows
+	%% SELECT 
+    emp_no, 
+    department, 
+    salary,
+    salary - LAG(salary) OVER(ORDER BY salary DESC) as salary_diff
+	FROM employees;
+	
+
+**------------------------------------ 17: Instagram Clone -----------------------------------------**
+	
+	
+Creating Schemas
+
+CREATE DATABASE instagram;
+USE instagram;
+
+CREATE TABLE users (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    created_ TIMESTAMP DEFAULT NOW()
+    )
+
+CREATE TABLE photos (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    image_url VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+    
+CREATE TABLE comments (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    comment_text VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    photo_id INT NOT NULL, 
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (photo_id) REFERENCES photos(id)
+    );
+    
+CREATE TABLE likes (
+	user_id INT NOT NULL,
+    photo_id INT NOT NULL, 
+    created_at TIMESTAMP DEFAULT NOW(),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (photo_id) REFERENCES photos(id),
+    PRIMARY KEY (user_id, photo_id) -- duplicate likes wont work because of primary key constraint
+    );
+    
+CREATE TABLE follows (
+	follower_id INT NOT NULL,
+    followee_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (followee_id) REFERENCES users(id),
+    PRIMARY KEY (follower_id, followee_id)
+    );
+    
+CREATE TABLE tags (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(255) UNIQUE,
+    created_at TIMESTAMP DEFAULT NOW()
+    );
+    
+CREATE TABLE photo_tags (
+	photo_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    FOREIGN KEY (photo_id) REFERENCES photos(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id),
+    PRIMARY KEY (photo_id, tag_id)
+    );
+    
+-- INSERT CLONE DATA FROM SQL FILE
+
+@@@@@@@@@@@@ CHALLENGES - Ask some questions about the Instagram data @@@@@@@@@@@
+
+#1 We want to reward our oldest users, find the oldest 5
+	SELECT * FROM Users
+	ORDER BY created_at DESC LIMIT 5;
+
+#2 What day of the week do most users register on, to put out promotional emails for example
+	SELECT 	DAYNAME(created_at) AS day,
+			COUNT(*) AS total 
+			FROM users
+			GROUP BY day
+			ORDER BY total DESC;
+			
+#3 We want to target our inactive users with an email campaign, find the users who havent posted a photo (people who havent posted a photo before)
+
+SELECT users.id, username FROM users
+LEFT JOIN photos ON photos.user_id = users.id
+WHERE image_url IS NULL;
+
+#4 We're running a new contest to see who can get the most likes on a single photo, who won? -- Identify most popular photo and user who created it
+
+SELECT users.username, photos.id, count(*) AS total_likes FROM photos
+JOIN likes on likes.photo_id = photos.id
+JOIN USERS on photos.user_id = users.id
+GROUP BY photos.id
+ORDER BY total_likes DESC
+LIMIT 10;
+
+#5  How many times does the average user post?
+SELECT 
+		(SELECT COUNT(*) FROM photos) / (SELECT COUNT(*) from users) AS average_posts;
+		
+#6 What are the 5 monst commonly used hash_tags?
+
+select * from tags LIMIT 10;
+select * from photo_tags LIMIT 10;
+
+SELECT tags.tag_name, count(*) AS tags_used FROM tags
+JOIN photo_tags ON tags.id = photo_tags.tag_id
+GROUP BY photo_tags.tag_id
+ORDER BY tags_used DESC
+LIMIT 5;
+
+#7 Find users who have liked every single photo on the site (bots)
+
+SELECT * FROM users LIMIT 5;
+SELECT * FROM likes LIMIT 5;
+
+SELECT users.username, count(*) as total_likes FROM users
+JOIN likes ON users.id = likes.user_id
+GROUP BY users.id
+HAVING total_likes = (SELECT COUNT(*) FROM photos);
+	
+	

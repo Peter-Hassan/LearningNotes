@@ -1,0 +1,92 @@
+Using Git - Introduction
+notes from:
+https://zarkom.notion.site/zarkom/Introduction-to-Git-ac396a0697704709a12b6a0e545db049
+-------------------- Basics --------------------
+- Git is a version control system
+	- avoids making lots of copies of files eg draft1, draft2 etc
+	- track changes and can revert to previous versions
+	
+- Different to github, github does use git but can use git on its own
+
+	
+Configuring Git
+	git config --global user.name "Your Name"
+	git config --global user.email "your@email.com"
+	not used to log in anywhere, just used to track who made what changes
+	
+Repositories
+	- Containers for git, hold the project
+	- $ git init (creates file inside folder containing info about repo)
+	- $ git status
+	- say we add a file : $ touch index.html
+		- $ git status will say we have untracked changes
+	- To make a commit, have to decide what files to add to staging area, then commit
+		- $git add index.html
+			- now using $ git status will show in green the files that need to be committed
+	- $ git commit -m 'message containing what and why you are committing to the repository'
+	- now git status will show nothing to commit, but using $git log, will be able to track changes
+	- using $ git status will also alert to modified files, need to add and commit again
+	- $ git add index.html app.js 
+		- chaining together things to add multiple
+		- alternatively can add everything into staging area: $git add .
+	- $git checkout
+		- allows you to go back to previous commits with hash from $ git log
+		- $ git checkout 78wefh22h4f92fjdwfiojf (hash for commit)
+		
+Branches
+	- Branches are like a timeline of project commits
+	- Say you have a different idea about how to do something in a project
+		- instead of doing in main project, can create a branch *side timelne*
+		- look at changes before combining with master branch
+	- Standard branch is called master
+	$ git branch (lists branches)
+	$ git branch crazycolours (creates new branch)
+	$ git checkout crazycolours
+	- say you want to adopt changes from a branch into master
+		 - $ git merge crazycolours
+	- deteting a branch
+		$ git branch -d crazycolours
+		
+			
+---------- Github ------------
+notes on : https://zarkom.notion.site/Introduction-to-GitHub-202af6f64bbd4299b15f238dcd09d2a7
+
+- What is github? 
+	- platform for hosting git repositories, for sharing/posting/collab with a team
+	- Git set up on PC with everything hosted locally including change log and git file
+	- Need to create repository on github to connect the two
+		- create repositories
+		- connect local repo (add remote)
+		- push code to github using remote
+	
+$ git remote add origin www.github.com/user/repositiry.git
+	- online place where you can push or retrive code from
+	- origin is a name or label for the remote, can name something else
+	$ git remove -v lists remote
+	$ git push -u origin master
+		- tells git to push code from local to online 
+		- can push different branches up 
+		- may add for username/pass
+	- can add collaborators on github, that can change the project, which wont be locally
+	- only on github, will need to pull from origin master
+	$ git pull origin master
+what abuot with different branches?
+	- $ git checkout -b relaxing
+		- $ git status 
+		- $ git add playlist.txt (adding to staging area)
+		- $ git commit -m 'add relaxing songs'
+		now pushing, wont be using master, will be using relaxing
+			- $ git push -u origin relaxing
+getting code from github that you dont have locally
+	 - note do not want to clone repo into another repo
+	 $ cd ..
+	 $mkdir deepfake
+	 $ cd deepfake
+	 $ git clone www.github.com/user/url
+		 - wont be able to push changes, as not collab
+		 - if you want to make changes, need to make a pull request
+		 - fork repository, which makes you a copy of repo on github
+			- clone the forked repository, after changes are made and committed can add pull request on github website
+		 - after can make a request to make changes to the devs project on github
+
+

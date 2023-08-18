@@ -1,0 +1,415 @@
+Anaconda Prompt
+
+	cd - change directory 
+	dir - list directories
+	virtual env: conda create --name fluffy numpy
+				 y
+				 active fluffy
+				 deactivate fluffy
+				 conda install pandas, ......,....,..
+	tab inside notebook to see avaliable functions from module
+	shift tab inside a function to see docstring of that function
+				 
+Numpy
+
+	Starting functions 
+		np.arrange(0, 10) # array of 0-9 in an array
+		np.arrange(0, 11, 2) # array of 0-9 in an array, with step size 0,2,4,6,8,10
+		np.zeros(3) - # array of 3 zeros
+		np.zeros((2,5)) #2 rows, 5 columns (multiple dimensions)
+		np.ones((rows,columns)) #like zeros
+		np.linspace(0,5,100) # 100 evenly spaced points between 0 and 5
+		np.eye(4) #identify matrix, 2d square matrix, diagonal of 1s and everything else 0
+		np.random.rand(5) #randomly generated array between 0 and 1 
+		np.random.rand(5,5) #5 by 5 generated of random betwene 0-1
+		np.random.randn(2) #2 random numbers normally distributed between 0/1
+		np.rand.randint(1, 100, n) #rand int between 1 and 100 where n is number of ints
+		array.reshape(5,5) #can reshape a matrix, only if the matrix can be filled (if array has 25 elements)
+		array.max() # gets max of array
+		array.min() # gets min of array
+		array.argmax() #returns index location of max value, also argmin
+		array.shape() # returns shape of array
+		array.dtype() # returns dtype of array
+	
+	
+	Indexing
+		array[8] # returns 8th value in array, like python slicing
+		array[1:5] # returns array 1 to 5, slicing notation same as in python eg [:6] [5:]
+		
+		Broadcasting - Numpy arrays differ from a normal Python list because of their ability to broadcast:
+		array[0:5]=100
+			array([100, 100, 100, 100, 100,   5,   6,   7,   8,   9,  10])
+		slice_of_arr = arr[0:6]
+		slice_of_arr[:] = 99
+		slice_of_arr
+			array([0, 1, 2, 3, 4, 5])
+			# Now note the changes also occur in our original array!
+				arr
+					array([99, 99, 99, 99, 99, 99,  6,  7,  8,  9, 10]) 
+					# Data is not copied, it's a view of the original array! This avoids memory problems!
+					If want a copy can use arr_copy = arr.copy()
+						If not, only viewing the original array
+			
+		Indexing 2d array
+		arr_2d = np.array(([5,10,15],
+						   [20,25,30],
+						   [35,40,45]))
+		arr_2d[1] #Indexing row
+		arr_2d[1][0] # Format is arr_2d[row][col] or arr_2d[row,col]
+			 returns 20 (2nd row first columns)
+		array slicing
+			top right corner 10 15
+							 25 30
+			array_2d[:2,1:] # everything from row 0-2, everythign from column 1 onwards
+		
+		Condtional Selection
+		bool_array = array > 5 # returns a boolean array, can use for conditonal selection
+		array[bool_array] # only returns instances when the conditional is true
+		
+	Numpy Operations	
+		arr + arr  # adds arrays together, same for - and *
+		scalar multiplcation broadcasts to entire array
+			arr * 2, arr +100 etc
+		arr/arr where arr[0] is 0
+			Numpy will issue warning when dividing by zero, giving a nan (NULL) output back
+		np.sqrt(arr) #square root of array
+		np.exp(arr) #exponential of array
+		np.max(arr) # same as passing method off it
+		np.sin(arr) # pass every element into sin
+		np.log(arr) # log of array
+		
+Pandas
+		
+	Series
+		labels = ['a','b','c']
+		my_list = [10,20,30]
+		pd.Series(data=my_list,index=labels) #takes list as the values, and index as the labels for that index
+			a    10
+			b    20
+			c    30
+		Can pass in np array as data and will work like a python list
+		Series can hold any data object string, int, functions data=[sum,print,len] 
+		Using an index:
+		ser1 = pd.Series([1,2,3,4],index = ['USA', 'Germany','USSR', 'Japan'])   
+		ser2 = pd.Series([1,2,5,4],index = ['USA', 'Germany','Italy', 'Japan'])
+		ser1['USA'] # Based off the label
+		ser1[0] # Based off the index
+		ser1 + ser2 # will try to add up the series based on the index, if not matching will add a NULL NaN value
+		
+	Dataframes
+		Part 1:
+			df = pd.DataFrame(randn(5,4), ['A','B','C','D','E'),['W','X','Y','Z']) # random normal array, with index abcd and columns wxyz
+			df['W'] # returns w column, which actually is a series
+			df[['W','X']] # list of column names which returns multiple columns
+			df['new'] = df['new'] = df['W'] + df['Y'] # creating new column
+			df.drop('new', axis=1, inplace=true) # dropping columns, axis 0 refers to index and axis 1 refers to columns
+			df.loc['A'] # search/select rows using labels by the .loc method
+			Can pass a list into loc to return a subset of dataframe
+				df.loc[['A','B'],['W','Y']]
+			df.iloc[2] # search/select row using an index by the .iloc method
+			sal['TotalPayBenefits'].idxmin() # returns the index where totalpaybenefits is minimized
+		Part 2:
+			conditionals act like in numpy and return an array like/dataframe of bools
+				booldf = df > 0
+				df[bool_df] or df[df>0]
+				df[df['w']>0]['y',''x']
+			Multiple conditonals
+				Can't use python 'and' logical for list of booleans: series truth value is ambigious (only deals with single instances of boolean values)
+				Can use &: have to seperate with () & ()
+					df[(df['W']>0) & (df['Y'] > 1)]
+				For the 'or' operator, use pipe character '|'
+			df.reset_index(inplace=true) # resets index to numerical, inplace=true required like a lot of methods
+			Column in dataframe as index
+				newIndex = 'CA NY WY OR CO'.split()
+				df['States'] = newIndex
+				df.set_index('states')
+		Part 3:
+			Multi-Index and Index Hierarchy
+			# Index Levels
+			outside = ['G1','G1','G1','G2','G2','G2']
+			inside = [1,2,3,1,2,3]
+			hier_index = list(zip(outside,inside))
+			hier_index = pd.MultiIndex.from_tuples(hier_index) # creates a multi index from tuples, where each index has multiple rows, example G1 has 1,2,3
+			df.index.names = ['Group','Num']
+			df.loc['G1']
+			df.loc['G1'].loc[1] # accessing indside that multi index
+			df.xs('G1') # returns all the multiindex inside g1
+			df.xs(1,level='Num') # splits on the 1st num of g1/g2
+			NOTES ON XS:
+			# The xs method (short for cross-section) is used to extract a subset of data from a DataFrame or Series
+			DataFrame.xs(key='', level=None, axis=0, drop_level=True)
+				key: The value(s) to select along the specified level(s) of the index.
+				level: The name(s) or position(s) of the level(s) of the index to select from. If not specified, it selects from the first level of the index.
+				axis: The axis to extract data from. 0 for rows (default) and 1 for columns.
+			
+		Missing Data
+			df = pd.DataFrame({'A':[1,2,np.nan],'B':[5,np.nan,np.nan],'C':[1,2,3]})
+			df.dropna(axis=0, thresh=2) # drops any rows with NULL values, axis=1 to drop columns with null values, thresh will keep null values below the threshold
+			df.fillna(value='FILL VALUE') #fills in NULL with any value
+			df['A'].fillna(value=df['A'].mean())
+			df.fillna(method='ffill', inplace=True) #fills NULL values forward, also a bfill method to fill backwards
+			df.interpolate(method='linear', inplace=True) # Fills NULL values based on the values around the NAN value
+		Group By
+			Groups rows based on a column and allows you to perform some aggregate function, like SQL
+				data = {'Company':['GOOG','GOOG','MSFT','MSFT','FB','FB'],
+				'Person':['Sam','Charlie','Amy','Vanessa','Carl','Sarah'],
+				'Sales':[200,120,340,124,243,350]}
+				df = pd.DataFrame(data)
+				byComp = df.groupby('Company') # return a group by object and stores in variable
+				byComp.mean() # uses aggregate function mean to find the mean sales, doesnt work for person as is string function
+				df.groupby('company').sum()
+				.count() # counts instances of that row
+				.min()
+				.max()
+				.stdev
+				.describe()
+		Merging, joining and concatenating
+			Concatenating 
+				pd.concat([df1, df2, df3]) # concats the dataframes together given the dimensions should match along the axis you are concatenating on
+					By default, joins on rows axis=0, can change to concat on columns axis=1
+			Merging
+				Similar logic to joining in SQL:
+				
+				left = pd.DataFrame({'key': ['K0', 'K1', 'K2', 'K3'],
+                     'A': ['A0', 'A1', 'A2', 'A3'],
+                     'B': ['B0', 'B1', 'B2', 'B3']})
+				right = pd.DataFrame({'key': ['K0', 'K1', 'K2', 'K3'],
+                          'C': ['C0', 'C1', 'C2', 'C3'],
+                          'D': ['D0', 'D1', 'D2', 'D3']}) 
+						  
+				pd.merge(left, right,how=inner,on='key')
+			Joining 	
+				Joining will join a dataframe on a particular index key
+				left.join(right, how='outer')
+		Operations
+			df.head()
+			df.tail()
+			df['col2'].unique() # returns array of unique values, nunique() returns count of unique values
+			df['col2'].value_counts() # returns list of values and the number of times they appear
+			df['col1'].apply(times2) # applies a function to a column, can be used for python inuilt funciton slike len as well
+			df['col1'].apply(lambda x: x*2) # applies function without having to create with lambda
+			df.drop('col1', axis=1, inplace=true) # dropping columns
+			df.columns # returns list of index names
+			df.index # returns information of index
+			df.sort_values('col2') # sorts by a column
+			#df.isnull() creates a boolean dataframe of null values
+			df.info() #gives number of entries
+			sal[['TotalPayBenefits', 'title_len']].corr() # Returns correlation between two columns
+			Pivot tables:
+				data = {'A':['foo','foo','foo','bar','bar','bar'],
+						 'B':['one','one','two','two','one','one'],
+						   'C':['x','y','x','y','x','y'],
+						   'D':[1,3,2,5,4,1]}
+
+				df = pd.DataFrame(data)
+				df.pivot_table(values='D',index=['A', 'B'],columns=['C'])
+		Data Input and Output
+			Can work with many inputs and output data in many forms: CSV, Excel, HTML, SQL
+				conda install sqlalchemy lxml html5lib beautifulsoup4
+			CSV
+				df = pd.read_csv('example') # CSV Input
+				df.to_csv('example',index=False) # CSV Output, index=false removes index from dataframe
+			Excel
+				pd.read_excel('Excel_Sample.xlsx',sheetname='Sheet1') #excel input
+				df.to_excel('Excel_Sample.xlsx',sheet_name='Sheet1') #excel output
+			HTML 
+				df = pd.read_html('http://www.fdic.gov/bank/individual/failed/banklist.html') 
+				# Tries to find every table inside a HTMl source
+			SQL
+				from sqlalchemy import create_engine
+				user = 'yourusername'
+				password = 'yourpassword'
+				host = 'yourhost'
+				port = 3306
+				db_url = f'mysql://{user}:{password}@{host}:{port}/{database}'
+				engine = create_engine(db_url)
+				# Read data from MySQL into a pandas DataFrame
+					query = 'SELECT * FROM your_table'
+					df = pd.read_sql(query, engine)
+				# Do some processing on the data
+					df = df.groupby('column_name').sum()
+				# Write data from a pandas DataFrame to MySQL
+					table_name = 'your_table'
+					df.to_sql(table_name, engine, if_exists='replace', index=False)
+					
+		USEFUL: def lawyer_string(job):  ###write a function to give to lambda
+					if 'lawyer' in job.lower():
+						return True
+					else:
+						return False
+					
+					sum(ecom['Job'].apply(lambda x: lawyer_string(x)))
+					
+	Data Visualization - Matplotlib
+		import matplotlib.pyplot as plt
+		%matplotlib inline
+		Example:
+			import numpy as np
+			x = np.linspace(0, 5, 11)
+			y = x ** 2
+			plt.plot(x,y)
+			plt.xlabel('X Axis Title Here')
+			plt.ylabel('Y Axis Title Here')
+			plt.title('String Title Here')
+		Multiplots:
+			# plt.subplot(nrows, ncols, plot_number)
+			plt.subplot(1,2,1)
+			plt.plot(x, y, 'r--') # More on color options later
+			plt.subplot(1,2,2)
+			plt.plot(y, x, 'g*-');
+		Object Oriented Method
+			Regular Plot
+				Create figure objects and call methods off of them, more efficient and gives more control than functional method above
+				fig = plt.figure() 	# Create Figure (empty canvas)
+				axes = fig.add_axes([0.1, 0.1, 0.8, 0.8]) # left, bottom, width, height (range 0 to 1)
+				axes.plot(x, y, 'b') # Plot on that set of axes
+				axes.set_xlabel('Set X Label') # Notice the use of set_ to begin methods
+				axes.set_ylabel('Set y Label')
+				axes.set_title('Set Title')
+				Possible to add more axes to a single figure, will create inset
+					axes1 =...
+					axes2 =...
+			Subplots
+				fig, axes = plt.subplots(nrows=1, ncols=2) # creates sublots with 1 row and 2 columns, which is a list of axes objects that can be iterated through/indexed
+				eg. axes[0].plot(x,y) or for ax in axes: ....plot set title etc
+			Figure size, aspect ratio and DPI
+				fig = plt.figure(figsize=(8,4), dpi=100) #12 width, 4 height, dpi is dots per inch (pixels per inch)
+				fig, axes = plt.subplots(figsize=(12,3))
+			 fig.savefig("filename.png", dpi=200) # saving figures, increase dpi for more detail
+			 To add legends, add label to plot function:
+				ax.plot(x, x**2, label="x**2")
+				ax.plot(x, x**3, label="x**3")
+				ax.legend(loc=0) #different location codes for graph locations
+		Colours, Styling, Line Style,
+			ax.plot(x, x+2, color="#8B008B")        # RGB hex code, or colour if dont want a custom colour
+			ax.plot(x, x+4, color="red", linewidth=2.00, alpha = 0.5) #linewidth argument makes line thicker, alpha controls transparancy 
+			ax.plot(x, x+5, color="green", lw=3, ls='-') # possible linestype options ‘-‘, ‘–’, ‘-.’, ‘:’, ‘steps’
+			ax.plot(x, x+10, color="blue", lw=3, ls='--', marker='o') # markers mark out a point: +', 'o', '*', 's', ',', '.', '1', '2', '3', '4',
+			marker='s', markersize=8, markerfacecolor="yellow", markeredgewidth=3, markeredgecolor="green"); # more arguments for size, color, width 
+			axes[2].set_ylim([0, 60]) AND axes[2].set_xlim([2, 5]) # sets y axis and x axis limit
+	
+	Data Visualization Seaborn
+		import seaborn as sns
+		%matplotlib inline
+		tips = sns.load_dataset('tips') # sns has datasets built in that you can load and play with
+		tips.head()
+		Distribution Plots
+			Distplot:
+			sns.distplot(tips['total_bill']) # Creates a plot of the distribution of data
+			sns.distplot(tips['total_bill'],kde=False,bins=30) # removes kde from graph, also able to customize the bins of the distribution/histogram
+			Jointplot:
+			sns.jointplot(x='total_bill',y='tip',data=tips,kind='scatter') # compares distribution of total bill/tip size, with a scatter graph between them, kind ='hex' hexagons, kind ='reg'regression line, kind = 'kde' for density
+			pairplot:
+			sns.pairplot(tips) # pass in dataframe and will create a jointplot for all numerical data in the dataframe
+			sns.pairplot(tips,hue='sex',palette='coolwarm') # can add in hue with a categorical data point, and will seperate data based on this
+			rugplot:
+			counts all instances, like a histogram, but with no bins, just dashes for all points along distribution line
+			kde plots:
+			kernal density estimation plots
+		Categorical Plots
+			barplot:
+			sns.barplot(x='sex',y='total_bill',data=tips) # barplot is a general plot that allows you to aggregate the categorical data based off some function, by default the mean
+			sns.barplot(x='sex',y='total_bill',data=tips,estimator=np.std) # estimator changes how they are aggregated
+			countplot:
+			sns.countplot(x='sex',data=tips) # same as barplot but counts the occurences 
+			boxplot:
+			sns.boxplot(x="day", y="total_bill", data=tips,palette='rainbow') # box plot and whiskers plot
+			sns.boxplot(x="day", y="total_bill", hue="smoker",data=tips, palette="coolwarm") # can again add hue = 'qualative' to seperate
+			violin plot:
+			sns.violinplot(x="day", y="total_bill", data=tips,palette='rainbow') like a boxplot, but shows distribution of data, slightly harder to look at
+			sns.violinplot(x="day", y="total_bill", data=tips,hue='sex',split=True,palette='Set1') # can also split with hue, and also split='True' to join halfs of the plot
+			stripplot:
+			sns.stripplot(x="day", y="total_bill", data=tips,jitter=True) # stacks points ontop of each other, careful as harder to interprut
+			sns.stripplot(x="day", y="total_bill", data=tips,jitter=True,hue='sex',palette='Set1') # again, can seperate further on hue='sex'
+			swarmplot:
+			sns.swarmplot(x="day", y="total_bill", data=tips) # stripplot and a distribution plot, stacks points but shows distribution also
+			Can combine swam and strip plot into one graph by plotting both in same line, useful for data exploring
+		Matrix plots:
+			# Matrix form for correlation data
+			tips.corr()
+			sns.heatmap(tips.corr(),cmap='coolwarm',annot=True) # provides a heatmap of correlation, cmap colourmapping, annot annotations
+			flights.pivot_table(values='passengers',index='month',columns='year') # creates pivot table, then able to apply heatmap as in matrix form
+			sns.heatmap(pvflights,cmap='magma',linecolor='white',linewidths=1) # can add lines between heatmap to make easier to read
+			sns.clustermap(pvflights) # clusters like data together,  useful for seeing months/years that are similar to each other
+		Grids 
+			#Grids are general types of plots that allow you to map plot types to rows and columns of a grid, this helps you create similar plots separated by features.
+			pairgrid:
+			sns.PairGrid(iris) # like pairplot, but will create empty grids of where teh graphs were so you can customize them
+				g = sns.PairGrid(iris)
+				g.map_diag(plt.hist)
+				g.map_upper(plt.scatter)
+				g.map_lower(sns.kdeplot) #allows customization of graphs
+			Facet grid:
+			g = sns.FacetGrid(tips, col="time", row="smoker") # like the subplots from matplotlib but with cols and rows
+			g = sns.FacetGrid(tips, col="time", row="smoker") # like the subplots from matplotlib but with cols and rows
+				g = sns.FacetGrid(tips, col="time",  row="smoker")
+				g = g.map(plt.hist, "total_bill") # seperation by time and if they smoke, with a histogram plot and total bill, if graph requires two arguments pass in two
+		Regression plots
+			Linear Model plots
+			sns.lmplot(x='total_bill',y='tip',data=tips) #scatter plot with regression line on, can pass in hue ='sex' for further data seperation
+			sns.lmplot(x="total_bill", y="tip", row="sex", col="time",data=tips) # possible to seperate like the facetgrids further into seperate graphs
+			aspect=1,height=10 # aspect is a scalar based on height, height is height
+		Size and Color
+			sns.set_style('white') # darkgrid, whitegrid, dark, white, ticks
+			sns.despine() # removes spines off the sides, right and top by default
+			Size:
+				plt.figure(figsize=(12,3)) # will override and change figure size of sns
+				sns.countplot(x='sex',data=tips)
+				sns.set_context('talk',font_scale=1) # change size of labels poster, notebook, talk, paper and font_scale argument for further scaling
+				
+	Data Visualization Pandas Inbuilt
+		df1['A'].hist() # histogram 
+		lots of different plot types:
+			df.plot.area
+			df.plot.barh # (stacked=True) will add a hue like in seaborn
+			df.plot.density
+			df.plot.hist	#(bins=50)
+			df.plot.line # df1.plot.line(x=df1.index,y='B',figsize=(12,3),lw=1)
+			df.plot.scatter #df1.plot.scatter(x='A',y='B',c='C',cmap='coolwarm')
+			df.plot.bar
+			df.plot.box # df2.plot.box() # Can also pass a by= argument for groupby
+			df.plot.hexbin
+			df.plot.kde # df2['a'].plot.kde()
+			df.plot.pie
+	Data Capstone Project - Useful stuff
+		df['timeStamp'] = pd.to_datetime(df['timeStamp']) # converting to a timestamp format 
+		timestamp formats have many functions you can call off them to return a hour, dayof week, year etc:
+			df['Hour'] = df['timeStamp'].apply(lambda time: time.hour)
+			df['Month'] = df['timeStamp'].apply(lambda time: time.month)
+			df['Day of Week'] = df['timeStamp'].apply(lambda time: time.dayofweek)
+		Can use map to map a dictionary onto a series:
+			dmap = {0:'Mon',1:'Tue',2:'Wed',3:'Thu',4:'Fri',5:'Sat',6:'Sun'}
+			df['Day of Week'].map(dmap)
+
+		
+				
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+			
+		
+	
+			
+			
+			
+			
+			
+			 
+	
+				
+			
